@@ -3,14 +3,21 @@ import { db } from "./firebase";
 import {
   collection,
   addDoc,
-  deleteDoc,
-  doc,
   onSnapshot,
   query,
   orderBy,
   serverTimestamp,
 } from "firebase/firestore";
+
 import toast, { Toaster } from "react-hot-toast";
+
+import {
+  FaSearch,
+  FaUserShield,
+  FaPhone,
+  FaUniversity,
+  FaExclamationTriangle,
+} from "react-icons/fa";
 
 export default function App() {
   const [reportType, setReportType] = useState("number");
@@ -20,7 +27,10 @@ export default function App() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const q = query(collection(db, "scammers"), orderBy("createdAt", "desc"));
+    const q = query(
+      collection(db, "scammers"),
+      orderBy("createdAt", "desc")
+    );
 
     const unsub = onSnapshot(q, (snapshot) => {
       const list = snapshot.docs.map((doc) => ({
@@ -50,17 +60,7 @@ export default function App() {
     setValue("");
     setReason("");
 
-    toast.success("Scammer report added ✅");
-  };
-
-  const handleDelete = async (id) => {
-    await deleteDoc(doc(db, "scammers", id));
-    toast.success("Deleted successfully ❌");
-  };
-
-  const copyText = (text) => {
-    navigator.clipboard.writeText(text);
-    toast.success("Copied: " + text);
+    toast.success("Report submitted successfully");
   };
 
   const filteredData = data.filter((item) => {
@@ -73,138 +73,215 @@ export default function App() {
     );
   });
 
+  const totalCount = data.length;
+
+  const getTypeIcon = (type) => {
+    if (type === "number") return <FaPhone />;
+    if (type === "username") return <FaUserShield />;
+    if (type === "bank") return <FaUniversity />;
+
+    return <FaExclamationTriangle />;
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-100 p-4 md:p-8">
+    <div className="min-h-screen bg-gray-50 text-black">
       <Toaster position="top-right" />
 
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">
-            🚨 Scammer Report Database
-          </h1>
-          <p className="text-gray-500 text-sm md:text-base">
-            Search and report scammer numbers, usernames, and bank details.
-          </p>
-        </div>
+      {/* Navbar */}
+      <div className="bg-white shadow-md border-b px-4 py-4">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
 
-        {/* Main Card */}
-        <div className="bg-white shadow-xl rounded-3xl border border-gray-100 p-6 md:p-8">
+          {/* Title */}
+          <h1 className="text-xl md:text-2xl font-bold text-center flex items-center gap-2">
+            <FaUserShield className="text-blue-600" />
+            Scammer Report Database
+          </h1>
+
           {/* Search */}
-          <div className="relative mb-6">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg">
-              🔍
-            </span>
+          <div className="relative w-full md:w-80">
+            <FaSearch className="absolute left-3 top-3 text-gray-400" />
 
             <input
               type="text"
-              placeholder="Search by number, username, bank, or reason..."
+              placeholder="Search reports..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-gray-50 border border-gray-200 rounded-2xl py-3 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-300 transition"
+              className="w-full border rounded-lg pl-10 pr-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200"
             />
           </div>
+        </div>
+      </div>
 
-          {/* Form */}
-          <div className="space-y-4 mb-8">
-            <select
-              value={reportType}
-              onChange={(e) => {
-                setReportType(e.target.value);
-                setValue("");
-              }}
-              className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-300 transition"
-            >
-              <option value="number">📱 Report by Number</option>
-              <option value="username">👤 Report by Username</option>
-              <option value="bank">🏦 Report by Bank</option>
-            </select>
+      {/* Main */}
+      <div className="max-w-5xl mx-auto p-4 md:p-8">
 
-            <input
-              type="text"
-              placeholder={
-                reportType === "number"
-                  ? "Enter scammer number"
-                  : reportType === "username"
-                  ? "Enter scammer username"
-                  : "Enter bank information"
-              }
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-300 transition"
-            />
+        {/* Header Center */}
+        <div className="text-center mb-8">
 
-            <textarea
-              placeholder="Enter scam details or reason"
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-              className="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 h-32 resize-none focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-300 transition"
-            />
+          <h2 className="text-3xl font-bold mb-2">
+            Report Scam Activity
+          </h2>
 
-            <button
-              onClick={handleSubmit}
-              className="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-2xl font-semibold shadow-md transition duration-200"
-            >
-              Add Scammer Report
-            </button>
+          <p className="text-gray-600">
+            Submit and search scammer numbers,
+            usernames, and bank details.
+          </p>
+
+          {/* Total Count */}
+          <div className="mt-4 text-lg font-semibold">
+
+            Total Reports:
+
+            <span className="ml-2 text-red-600">
+              {totalCount}
+            </span>
+
           </div>
 
-          {/* Records */}
-          <div className="space-y-4 max-h-[500px] overflow-y-auto pr-1">
-            {filteredData.map((item, index) => (
-              <div
-                key={item.id}
-                className="bg-gray-50 border border-gray-100 rounded-2xl p-5 hover:shadow-md transition duration-200"
-              >
-                <div className="flex justify-between items-start gap-4 flex-wrap">
-                  <div className="space-y-2 text-sm text-gray-700">
-                    <p>
-                      <span className="font-semibold text-gray-900">Serial:</span>{" "}
-                      {index + 1}
-                    </p>
+        </div>
 
-                    <p>
-                      <span className="font-semibold text-gray-900">Type:</span>{" "}
-                      <span className="capitalize">{item.type}</span>
-                    </p>
+        {/* Form */}
+        <div className="bg-white border shadow-sm rounded-xl p-6 mb-8 space-y-4">
 
-                    <p>
-                      <span className="font-semibold text-gray-900">Reported:</span>{" "}
-                      {item.value}
-                    </p>
+          {/* Type */}
+          <select
+            value={reportType}
+            onChange={(e) => {
+              setReportType(e.target.value);
+              setValue("");
+            }}
+            className="w-full border rounded-lg px-4 py-3 bg-blue-50 text-blue-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-200"
+          >
+            <option value="number">
+              Phone Number
+            </option>
 
-                    <p>
-                      <span className="font-semibold text-gray-900">Reason:</span>{" "}
-                      {item.reason}
-                    </p>
-                  </div>
+            <option value="username">
+              Username
+            </option>
 
-                  <div className="flex gap-2 flex-wrap">
-                    <button
-                      onClick={() => copyText(item.value)}
-                      className="bg-white border border-gray-200 px-4 py-2 rounded-xl text-sm hover:bg-gray-100 transition"
-                    >
-                      Copy
-                    </button>
+            <option value="bank">
+              Bank Info
+            </option>
+          </select>
 
-                    <button
-                      onClick={() => handleDelete(item.id)}
-                      className="bg-red-100 text-red-600 px-4 py-2 rounded-xl text-sm hover:bg-red-200 transition"
-                    >
-                      Delete
-                    </button>
-                  </div>
+          {/* Value */}
+          <input
+            type="text"
+            placeholder={
+              reportType === "number"
+                ? "Enter phone number"
+                : reportType === "username"
+                ? "Enter username"
+                : "Enter bank details"
+            }
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-200"
+          />
+
+          {/* Reason */}
+          <textarea
+            placeholder="Enter scam reason"
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            className="w-full border rounded-lg px-4 py-3 h-32 resize-none focus:outline-none focus:ring-2 focus:ring-blue-200"
+          />
+
+          {/* Submit */}
+          <button
+            onClick={handleSubmit}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition"
+          >
+            Submit Report
+          </button>
+
+        </div>
+
+        {/* Records */}
+        <div className="space-y-4">
+
+          {filteredData.map((item, index) => (
+
+            <div
+              key={item.id}
+              className="bg-white border rounded-xl p-5 shadow-sm hover:shadow-md transition"
+            >
+
+              <div className="flex items-start gap-4">
+
+                {/* Icon */}
+                <div className="text-blue-600 text-xl mt-1">
+                  {getTypeIcon(item.type)}
                 </div>
+
+                {/* Content */}
+                <div className="flex-1 text-sm">
+
+                  <p className="font-semibold mb-1">
+
+                    Serial:
+                    <span className="ml-2">
+                      {index + 1}
+                    </span>
+
+                  </p>
+
+                  <p>
+                    <span className="font-semibold">
+                      Type:
+                    </span>
+
+                    <span className="ml-2 capitalize text-blue-700">
+                      {item.type}
+                    </span>
+
+                  </p>
+
+                  <p>
+                    <span className="font-semibold">
+                      Reported:
+                    </span>
+
+                    <span className="ml-2">
+                      {item.value}
+                    </span>
+
+                  </p>
+
+                  <p>
+                    <span className="font-semibold">
+                      Reason:
+                    </span>
+
+                    <span className="ml-2 text-gray-700">
+                      {item.reason}
+                    </span>
+
+                  </p>
+
+                </div>
+
               </div>
-            ))}
-          </div>
+
+            </div>
+
+          ))}
 
           {filteredData.length === 0 && (
-            <p className="text-center text-gray-400 mt-8">
+
+            <div className="text-center text-gray-400 mt-10 flex flex-col items-center gap-2">
+
+              <FaExclamationTriangle className="text-2xl" />
+
               No scammer reports found
-            </p>
+
+            </div>
+
           )}
+
         </div>
+
       </div>
     </div>
   );
