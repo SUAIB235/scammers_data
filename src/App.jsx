@@ -176,7 +176,7 @@ export default function App() {
 
           {/* Reason */}
           <textarea
-            placeholder="Enter scam reason"
+            placeholder="Enter report reason"
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             className="w-full border rounded-lg px-4 py-3 h-32 resize-none focus:outline-none focus:ring-2 focus:ring-blue-200"
