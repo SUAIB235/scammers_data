@@ -13,11 +13,14 @@ import {
 import toast, { Toaster } from "react-hot-toast";
 
 export default function App() {
-  const [number, setNumber] = useState("");
+  const [reportType, setReportType] = useState("number");
+  const [value, setValue] = useState("");
+  const [reason, setReason] = useState("");
+  const [search, setSearch] = useState("");
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const q = query(collection(db, "records"), orderBy("createdAt", "desc"));
+    const q = query(collection(db, "scammers"), orderBy("createdAt", "desc"));
 
     const unsub = onSnapshot(q, (snapshot) => {
       const list = snapshot.docs.map((doc) => ({
@@ -31,22 +34,26 @@ export default function App() {
   }, []);
 
   const handleSubmit = async () => {
-    if (!number) {
-      toast.error("Enter number");
+    if (!value || !reason) {
+      toast.error("Please fill all fields");
       return;
     }
 
-    await addDoc(collection(db, "records"), {
-      number,
+    await addDoc(collection(db, "scammers"), {
+      type: reportType,
+      value,
+      reason,
       createdAt: serverTimestamp(),
     });
 
-    setNumber("");
-    toast.success("Record added successfully ✅");
+    setValue("");
+    setReason("");
+
+    toast.success("Scammer report added ✅");
   };
 
   const handleDelete = async (id) => {
-    await deleteDoc(doc(db, "records", id));
+    await deleteDoc(doc(db, "scammers", id));
     toast.success("Deleted successfully ❌");
   };
 
@@ -55,81 +62,132 @@ export default function App() {
     toast.success("Copied: " + text);
   };
 
+  const filteredData = data.filter((item) => {
+    const searchLower = search.toLowerCase();
+
+    return (
+      item.value?.toLowerCase().includes(searchLower) ||
+      item.reason?.toLowerCase().includes(searchLower) ||
+      item.type?.toLowerCase().includes(searchLower)
+    );
+  });
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-red-100 to-red-200 flex items-center justify-center p-4">
       <Toaster position="top-right" />
 
-      {/* ✅ APP DOWNLOAD BUTTON (RESTORED) */}
-      <div className="fixed top-5 left-4 z-50">
-        <a
-          href="https://drive.google.com/file/d/174yAsyTZWD-6cdUycCsPGtWpvGcSLnEQ/view?usp=drive_link"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ textDecoration: "none" }}
-        >
-          <button className="flex items-center gap-3 px-6 py-3 rounded-2xl bg-white/20 backdrop-blur-lg border border-white/30 shadow-xl hover:scale-105 transition">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png"
-              alt="Drive"
-              className="w-7 h-7"
-            />
-            <div className="text-left">
-              <p className="text-xs text-gray-600">Get the app</p>
-              <p className="font-semibold text-gray-800">Download APK</p>
-            </div>
-          </button>
-        </a>
-      </div>
-
-      <div className="w-full max-w-2xl bg-white/80 backdrop-blur-lg shadow-2xl rounded-3xl p-6 border border-gray-200">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center">
-          🚀 Quick Data Manager
+      <div className="w-full max-w-3xl bg-white/90 backdrop-blur-lg shadow-2xl rounded-3xl p-6 border border-gray-200">
+        <h1 className="text-3xl font-bold text-center text-red-600 mb-6">
+          🚨 Scammer Report Database
         </h1>
 
-        {/* Input Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+        {/* Search Section */}
+        <div className="mb-6">
           <input
-            className="border rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            placeholder="Enter Number"
-            value={number}
-            onChange={(e) => setNumber(e.target.value)}
+            type="text"
+            placeholder="Search by number, username, bank, or reason..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500"
+          />
+        </div>
+
+        {/* Form Section */}
+        <div className="space-y-4 mb-6">
+          <select
+            value={reportType}
+            onChange={(e) => {
+              setReportType(e.target.value);
+              setValue("");
+            }}
+            className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500"
+          >
+            <option value="number">Report by Number</option>
+            <option value="username">Report by Username</option>
+            <option value="bank">Report by Bank</option>
+          </select>
+
+          {reportType === "number" && (
+            <input
+              type="text"
+              placeholder="Enter scammer number"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+          )}
+
+          {reportType === "username" && (
+            <input
+              type="text"
+              placeholder="Enter scammer username"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+          )}
+
+          {reportType === "bank" && (
+            <input
+              type="text"
+              placeholder="Enter scammer bank info"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+          )}
+
+          <textarea
+            placeholder="Enter reason / scam details"
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500 h-28 resize-none"
           />
 
           <button
             onClick={handleSubmit}
-            className="bg-indigo-600 text-white rounded-xl px-4 py-2 hover:bg-indigo-700 transition font-medium"
+            className="w-full bg-red-600 text-white rounded-xl py-3 hover:bg-red-700 transition font-semibold"
           >
-            Add
+            Add Scammer Report
           </button>
         </div>
 
-        {/* Records List */}
-        <div className="space-y-4 max-h-[400px] overflow-y-auto pr-1">
-          {data.map((item, index) => (
+        {/* Data List */}
+        <div className="space-y-4 max-h-[450px] overflow-y-auto pr-1">
+          {filteredData.map((item, index) => (
             <div
               key={item.id}
-              className="bg-white border border-gray-200 rounded-2xl p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3 hover:shadow-lg transition"
+              className="bg-white border border-gray-200 rounded-2xl p-4 hover:shadow-lg transition"
             >
-              <div>
-                <p className="text-gray-700 text-sm">
+              <div className="space-y-2">
+                <p className="text-sm text-gray-700">
                   <span className="font-semibold">Serial:</span> {index + 1}
                 </p>
-                <p className="text-gray-700 text-sm">
-                  <span className="font-semibold">Number:</span> {item.number}
+
+                <p className="text-sm text-gray-700 capitalize">
+                  <span className="font-semibold">Type:</span> {item.type}
+                </p>
+
+                <p className="text-sm text-gray-700">
+                  <span className="font-semibold">Reported Value:</span> {item.value}
+                </p>
+
+                <p className="text-sm text-gray-700">
+                  <span className="font-semibold">Reason:</span> {item.reason}
                 </p>
               </div>
 
-              <div className="flex gap-2 flex-wrap">
+              <div className="flex gap-2 mt-4 flex-wrap">
                 <button
-                  onClick={() => copyText(item.number)}
-                  className="px-3 py-1 bg-slate-200 rounded-lg hover:bg-slate-300 text-sm"
+                  onClick={() => copyText(item.value)}
+                  className="px-3 py-2 bg-slate-200 rounded-lg hover:bg-slate-300 text-sm"
                 >
-                  Copy No
+                  Copy
                 </button>
 
                 <button
                   onClick={() => handleDelete(item.id)}
-                  className="px-3 py-1 bg-rose-500 text-white rounded-lg hover:bg-rose-600 text-sm"
+                  className="px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm"
                 >
                   Delete
                 </button>
@@ -138,8 +196,10 @@ export default function App() {
           ))}
         </div>
 
-        {data.length === 0 && (
-          <p className="text-center text-gray-400 mt-6">No records yet</p>
+        {filteredData.length === 0 && (
+          <p className="text-center text-gray-400 mt-6">
+            No scammer reports found
+          </p>
         )}
       </div>
     </div>
