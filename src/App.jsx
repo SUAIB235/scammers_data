@@ -95,14 +95,14 @@ export default function App() {
 
           {/* Search */}
           <div className="relative">
-            <FaSearch className="absolute left-3 top-3 text-gray-400" />
+            <FaSearch className="absolute left-3 top-2.5 text-gray-400 text-sm" />
 
             <input
               type="text"
               placeholder="Search scam reports..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full border rounded-full pl-10 pr-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full border rounded-full pl-9 pr-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
             />
           </div>
         </div>
@@ -115,10 +115,11 @@ export default function App() {
         {!search && (
           <div className="text-center mb-6">
             <h2 className="text-xl md:text-2xl font-bold mb-1">
-              🚨 Report Scam Activity
+              Report Scam Activity
             </h2>
+
             <p className="text-gray-500 text-sm">
-              Help others stay safe
+              Submit and search scam reports
             </p>
 
             <div className="mt-2 text-sm font-semibold">
@@ -130,36 +131,42 @@ export default function App() {
           </div>
         )}
 
-        {/* Form (Hidden while searching) */}
+        {/* Form */}
         {!search && (
           <div className="bg-white border rounded-lg p-4 mb-6 space-y-3 shadow-sm">
 
-            <select
-              value={reportType}
-              onChange={(e) => {
-                setReportType(e.target.value);
-                setValue("");
-              }}
-              className="w-full border rounded-md px-3 py-2 text-sm bg-blue-50 focus:ring-2 focus:ring-blue-300"
-            >
-              <option value="number">📞 Phone Number</option>
-              <option value="username">👤 Username</option>
-              <option value="bank">🏦 Bank Info</option>
-            </select>
+            <div className="relative">
+              <FaPhone className="absolute left-3 top-2.5 text-gray-400 text-sm" />
+              <select
+                value={reportType}
+                onChange={(e) => {
+                  setReportType(e.target.value);
+                  setValue("");
+                }}
+                className="w-full border rounded-md pl-9 pr-3 py-2 text-sm bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              >
+                <option value="number">Phone Number</option>
+                <option value="username">Username</option>
+                <option value="bank">Bank Info</option>
+              </select>
+            </div>
 
-            <input
-              type="text"
-              placeholder="Enter value..."
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              className="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300"
-            />
+            <div className="relative">
+              {getTypeIcon(reportType)}
+              <input
+                type="text"
+                placeholder="Enter value..."
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                className="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+              />
+            </div>
 
             <textarea
               placeholder="Enter reason..."
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              className="w-full border rounded-md px-3 py-2 text-sm h-24 focus:ring-2 focus:ring-blue-300"
+              className="w-full border rounded-md px-3 py-2 text-sm h-24 focus:outline-none focus:ring-2 focus:ring-blue-300"
             />
 
             <button
@@ -183,12 +190,10 @@ export default function App() {
 
               <div className="flex gap-3">
 
-                {/* Icon */}
                 <div className={`text-lg ${getAlertColor(item.reason)}`}>
                   {getTypeIcon(item.type)}
                 </div>
 
-                {/* Content */}
                 <div className="text-sm flex-1">
 
                   <p className="font-semibold text-gray-800">
