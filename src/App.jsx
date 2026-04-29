@@ -173,10 +173,16 @@ export default function App() {
             <option value="bank">Bank Info</option>
           </select>
 
-          <input
+           <input
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            placeholder="Enter value"
+            placeholder={
+              reportType === "number"
+                ? "Enter Number"
+                : reportType === "username"
+                  ? "Enter Username"
+                  : "Enter Bank"
+            }
             className="w-full border rounded-lg p-3"
           />
 
