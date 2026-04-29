@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { db } from "./firebase";
 import {
   collection,
@@ -8,16 +8,8 @@ import {
   orderBy,
   serverTimestamp,
 } from "firebase/firestore";
-
 import toast, { Toaster } from "react-hot-toast";
-
-import {
-  FaSearch,
-  FaUserShield,
-  FaPhone,
-  FaUniversity,
-  FaExclamationTriangle,
-} from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 
 export default function App() {
   const [reportType, setReportType] = useState("number");
@@ -26,28 +18,18 @@ export default function App() {
   const [search, setSearch] = useState("");
   const [data, setData] = useState([]);
 
+  const submitRef = useRef(null);
+  const searchRef = useRef(null);
+
   useEffect(() => {
-    const q = query(
-      collection(db, "scammers"),
-      orderBy("createdAt", "desc")
+    const q = query(collection(db, "scammers"), orderBy("createdAt", "desc"));
+    return onSnapshot(q, (s) =>
+      setData(s.docs.map((d) => ({ id: d.id, ...d.data() }))),
     );
-
-    const unsub = onSnapshot(q, (snapshot) => {
-      const list = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setData(list);
-    });
-
-    return () => unsub();
   }, []);
 
-  const handleSubmit = async () => {
-    if (!value || !reason) {
-      toast.error("Please fill all fields");
-      return;
-    }
+  const submit = async () => {
+    if (!value || !reason) return toast.error("Fill all fields");
 
     await addDoc(collection(db, "scammers"), {
       type: reportType,
@@ -58,184 +40,206 @@ export default function App() {
 
     setValue("");
     setReason("");
-
-    toast.success("Report submitted");
+    toast.success("Submitted");
   };
 
-  const filteredData = data.filter((item) => {
-    const searchLower = search.toLowerCase();
-    return (
-      item.value?.toLowerCase().includes(searchLower) ||
-      item.reason?.toLowerCase().includes(searchLower) ||
-      item.type?.toLowerCase().includes(searchLower)
-    );
-  });
-
-  const totalCount = data.length;
-
-  const getTypeIcon = (type) => {
-    if (type === "number") return <FaPhone />;
-    if (type === "username") return <FaUserShield />;
-    if (type === "bank") return <FaUniversity />;
-    return <FaExclamationTriangle />;
+  const scrollToSubmit = () => {
+    submitRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   };
 
-  const getAlertColor = (reason) => {
-    if (reason?.toLowerCase().includes("fraud")) return "text-red-500";
-    return "text-yellow-500";
+  const scrollToSearch = () => {
+    searchRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   };
+
+  const filtered = data.filter((i) =>
+    [i.type, i.value, i.reason].some((v) =>
+      v?.toLowerCase().includes(search.toLowerCase()),
+    ),
+  );
+
+  const stats = [
+    { n: data.length, t: "Total Reports" },
+    { n: filtered.length, t: "Matches Found" },
+    { n: "24/7", t: "Live Search" },
+    { n: "100%", t: "Community Driven" },
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 text-black">
+    <div className="min-h-screen bg-[#f5faf6] text-slate-800">
       <Toaster position="top-right" />
 
-      {/* Navbar */}
-      <div className="bg-white shadow-sm px-4 py-3 sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto">
+      {/* HERO */}
+      <section className="max-w-6xl mx-auto px-4 py-12 grid md:grid-cols-2 gap-10 items-center">
+        <div>
+          <p className="text-emerald-600 font-semibold mb-3">
+            Community Protection Platform
+          </p>
 
-          {/* Search */}
-          <div className="relative">
-            <FaSearch className="absolute left-3 top-2.5 text-gray-400 text-sm" />
+          <h1 className="text-5xl font-bold leading-tight">
+            Report Scammers{" "}
+            <span className="text-emerald-500">With Confidence</span>
+          </h1>
 
-            <input
-              type="text"
-              placeholder="Search scam reports..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full border rounded-full pl-9 pr-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
-            />
+          <p className="mt-4 text-slate-500">
+            Search suspicious numbers, usernames, and bank details. Help others
+            stay safe by submitting reports instantly.
+          </p>
+
+          {/* MOBILE BUTTONS ONLY */}
+          <div className="mt-6 flex gap-3 md:hidden">
+            <button
+              onClick={scrollToSubmit}
+              className="bg-emerald-500 text-white px-5 py-3 rounded-lg w-full"
+            >
+              Submit Report
+            </button>
+
+            <button
+              onClick={scrollToSearch}
+              className="border px-5 py-3 rounded-lg w-full"
+            >
+              Search Now
+            </button>
           </div>
         </div>
-      </div>
 
-      {/* Main */}
-      <div className="max-w-5xl mx-auto p-4">
+        {/* DESKTOP SUBMIT FORM */}
+        <div
+          ref={submitRef}
+          className="hidden md:block bg-white rounded-2xl shadow-xl p-6 space-y-4"
+        >
+          <h3 className="font-bold text-xl">Create Scam Report</h3>
 
-        {/* Header */}
-        {!search && (
-          <div className="text-center mb-6">
-            <h2 className="text-xl md:text-2xl font-bold mb-1">
-              Report Scam Activity
-            </h2>
+          <select
+            value={reportType}
+            onChange={(e) => setReportType(e.target.value)}
+            className="w-full border rounded-lg p-3"
+          >
+            <option value="number">Phone Number</option>
+            <option value="username">Username</option>
+            <option value="bank">Bank Info</option>
+          </select>
 
-            <p className="text-gray-500 text-sm">
-              Submit and search scam reports
-            </p>
+          <input
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            placeholder={
+              reportType === "number"
+                ? "Enter Number"
+                : reportType === "username"
+                  ? "Enter Username"
+                  : "Enter Bank"
+            }
+            className="w-full border rounded-lg p-3"
+          />
 
-            <div className="mt-2 text-sm font-semibold">
-              Total Reports:
-              <span className="ml-2 text-red-500">
-                {totalCount}
-              </span>
+          <textarea
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            placeholder="Reason"
+            className="w-full border rounded-lg p-3 h-28"
+          />
+
+          <button
+            onClick={submit}
+            className="w-full bg-emerald-500 text-white py-3 rounded-lg font-semibold"
+          >
+            Submit Now
+          </button>
+        </div>
+      </section>
+
+      {/* MOBILE SUBMIT FORM */}
+      <section className="px-4 pb-6 md:hidden">
+        <div
+          ref={submitRef}
+          className="bg-white rounded-2xl shadow-xl p-6 space-y-4"
+        >
+          <h3 className="font-bold text-xl">Create Scam Report</h3>
+
+          <select
+            value={reportType}
+            onChange={(e) => setReportType(e.target.value)}
+            className="w-full border rounded-lg p-3"
+          >
+            <option value="number">Phone Number</option>
+            <option value="username">Username</option>
+            <option value="bank">Bank Info</option>
+          </select>
+
+          <input
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            placeholder="Enter value"
+            className="w-full border rounded-lg p-3"
+          />
+
+          <textarea
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            placeholder="Reason"
+            className="w-full border rounded-lg p-3 h-28"
+          />
+
+          <button
+            onClick={submit}
+            className="w-full bg-emerald-500 text-white py-3 rounded-lg font-semibold"
+          >
+            Submit Now
+          </button>
+        </div>
+      </section>
+
+      {/* STATS */}
+      <section className="bg-white py-8 border-y">
+        <div className="max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          {stats.map((s, i) => (
+            <div key={i}>
+              <div className="text-3xl font-bold">{s.n}</div>
+              <div className="text-sm text-slate-500">{s.t}</div>
             </div>
-          </div>
-        )}
+          ))}
+        </div>
+      </section>
 
-{/* Form */}
-{!search && (
-  <div className="bg-white border rounded-lg p-4 mb-6 space-y-3 shadow-sm">
+      {/* SEARCH */}
+      <section ref={searchRef} className="max-w-6xl mx-auto px-4 py-10">
+        <div className="relative max-w-xl mb-8">
+          <FaSearch className="absolute left-4 top-4 text-slate-400" />
 
-    {/* Select (no icon) */}
-    <select
-      value={reportType}
-      onChange={(e) => {
-        setReportType(e.target.value);
-        setValue("");
-      }}
-      className="w-full border rounded-md px-3 py-2 text-sm bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-300"
-    >
-      <option value="number">Phone Number</option>
-      <option value="username">Username</option>
-      <option value="bank">Bank Info</option>
-    </select>
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search reports..."
+            className="w-full bg-white rounded-full border pl-11 pr-4 py-3 shadow-sm"
+          />
+        </div>
 
-    {/* Input with proper icon */}
-    <div className="relative">
-      <div className="absolute left-3 top-2.5 text-gray-400 text-sm">
-        {reportType === "number" && <FaPhone />}
-        {reportType === "username" && <FaUserShield />}
-        {reportType === "bank" && <FaUniversity />}
-      </div>
-
-      <input
-        type="text"
-        placeholder={
-          reportType === "number"
-            ? "Enter number"
-            : reportType === "username"
-            ? "Enter username"
-            : "Enter bank details"
-        }
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        className="w-full border rounded-md pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
-      />
-    </div>
-
-    {/* Reason */}
-    <textarea
-      placeholder="Enter reason"
-      value={reason}
-      onChange={(e) => setReason(e.target.value)}
-      className="w-full border rounded-md px-3 py-2 text-sm h-24 focus:outline-none focus:ring-2 focus:ring-blue-300"
-    />
-
-    <button
-      onClick={handleSubmit}
-      className="w-full bg-blue-600 text-white py-2 rounded-md text-sm font-semibold hover:bg-blue-700"
-    >
-      Submit Report
-    </button>
-  </div>
-)}
-        {/* Results */}
-        <div className="space-y-3">
-
-          {filteredData.map((item, index) => (
-
+        <div className="grid md:grid-cols-2 gap-4">
+          {filtered.map((item) => (
             <div
               key={item.id}
-              className="bg-white border rounded-lg p-4 shadow-sm hover:shadow-md transition"
+              className="bg-white rounded-2xl border p-5 shadow-sm"
             >
-
-              <div className="flex gap-3">
-
-                <div className={`text-lg ${getAlertColor(item.reason)}`}>
-                  {getTypeIcon(item.type)}
-                </div>
-
-                <div className="text-sm flex-1">
-
-                  <p className="font-semibold text-gray-800">
-                    #{index + 1} • {item.type}
-                  </p>
-
-                  <p className="text-gray-600">
-                    {item.value}
-                  </p>
-
-                  <p className="text-gray-500 text-xs mt-1">
-                    {item.reason}
-                  </p>
-
-                </div>
-
-              </div>
-
+              <div className="font-semibold capitalize">{item.type}</div>
+              <div className="text-lg mt-1">{item.value}</div>
+              <div className="text-slate-500 text-sm mt-2">{item.reason}</div>
             </div>
-
           ))}
-
-          {filteredData.length === 0 && (
-            <div className="text-center text-gray-400 mt-10 flex flex-col items-center gap-2">
-              <FaExclamationTriangle className="text-3xl text-yellow-500" />
-              No scammer reports found
-            </div>
-          )}
-
         </div>
 
-      </div>
+        {filtered.length === 0 && (
+          <div className="text-center text-slate-400 py-10">
+            No reports found
+          </div>
+        )}
+      </section>
     </div>
   );
 }
