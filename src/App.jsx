@@ -131,53 +131,63 @@ export default function App() {
           </div>
         )}
 
-        {/* Form */}
-        {!search && (
-          <div className="bg-white border rounded-lg p-4 mb-6 space-y-3 shadow-sm">
+{/* Form */}
+{!search && (
+  <div className="bg-white border rounded-lg p-4 mb-6 space-y-3 shadow-sm">
 
-            <div className="relative">
-              <FaPhone className="absolute left-3 top-2.5 text-gray-400 text-sm" />
-              <select
-                value={reportType}
-                onChange={(e) => {
-                  setReportType(e.target.value);
-                  setValue("");
-                }}
-                className="w-full border rounded-md pl-9 pr-3 py-2 text-sm bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-300"
-              >
-                <option value="number">Phone Number</option>
-                <option value="username">Username</option>
-                <option value="bank">Bank Info</option>
-              </select>
-            </div>
+    {/* Select (no icon) */}
+    <select
+      value={reportType}
+      onChange={(e) => {
+        setReportType(e.target.value);
+        setValue("");
+      }}
+      className="w-full border rounded-md px-3 py-2 text-sm bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-300"
+    >
+      <option value="number">Phone Number</option>
+      <option value="username">Username</option>
+      <option value="bank">Bank Info</option>
+    </select>
 
-            <div className="relative">
-              {getTypeIcon(reportType)}
-              <input
-                type="text"
-                placeholder="Enter value..."
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-                className="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
-              />
-            </div>
+    {/* Input with proper icon */}
+    <div className="relative">
+      <div className="absolute left-3 top-2.5 text-gray-400 text-sm">
+        {reportType === "number" && <FaPhone />}
+        {reportType === "username" && <FaUserShield />}
+        {reportType === "bank" && <FaUniversity />}
+      </div>
 
-            <textarea
-              placeholder="Enter reason..."
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-              className="w-full border rounded-md px-3 py-2 text-sm h-24 focus:outline-none focus:ring-2 focus:ring-blue-300"
-            />
+      <input
+        type="text"
+        placeholder={
+          reportType === "number"
+            ? "Enter number"
+            : reportType === "username"
+            ? "Enter username"
+            : "Enter bank details"
+        }
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        className="w-full border rounded-md pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+      />
+    </div>
 
-            <button
-              onClick={handleSubmit}
-              className="w-full bg-blue-600 text-white py-2 rounded-md text-sm font-semibold hover:bg-blue-700"
-            >
-              Submit Report
-            </button>
-          </div>
-        )}
+    {/* Reason */}
+    <textarea
+      placeholder="Enter reason"
+      value={reason}
+      onChange={(e) => setReason(e.target.value)}
+      className="w-full border rounded-md px-3 py-2 text-sm h-24 focus:outline-none focus:ring-2 focus:ring-blue-300"
+    />
 
+    <button
+      onClick={handleSubmit}
+      className="w-full bg-blue-600 text-white py-2 rounded-md text-sm font-semibold hover:bg-blue-700"
+    >
+      Submit Report
+    </button>
+  </div>
+)}
         {/* Results */}
         <div className="space-y-3">
 
