@@ -91,12 +91,6 @@ export default function App() {
       <div className="bg-white shadow-md border-b px-4 py-4">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
 
-          {/* Title */}
-          <h1 className="text-xl md:text-2xl font-bold text-center flex items-center gap-2">
-            <FaUserShield className="text-blue-600" />
-            Scammer Report Database
-          </h1>
-
           {/* Search */}
           <div className="relative w-full md:w-80">
             <FaSearch className="absolute left-3 top-3 text-gray-400" />
