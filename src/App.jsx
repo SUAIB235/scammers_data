@@ -73,7 +73,29 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#f5faf6] text-slate-800">
       <Toaster position="top-right" />
-
+      
+     {/* ✅ APP DOWNLOAD BUTTON (RESTORED) */}
+      <div className="fixed top-5 left-4 z-50">
+        <a
+          href="https://drive.google.com/file/d/1tT9eLOoWFW9UemD65WAgtCKaBddbH742/view?usp=drivesdk"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ textDecoration: "none" }}
+        >
+          <button className="flex items-center gap-3 px-6 py-3 rounded-2xl bg-white/20 backdrop-blur-lg border border-white/30 shadow-xl hover:scale-105 transition">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png"
+              alt="Drive"
+              className="w-7 h-7"
+            />
+            <div className="text-left">
+              <p className="text-xs text-gray-600">Get the app</p>
+              <p className="font-semibold text-gray-800">Download APK</p>
+            </div>
+          </button>
+        </a>
+      </div>
+      
       {/* HERO */}
       <section className="max-w-6xl mx-auto px-4 py-12 grid md:grid-cols-2 gap-10 items-center">
         <div>
