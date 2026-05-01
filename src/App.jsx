@@ -75,7 +75,7 @@ export default function App() {
       <Toaster position="top-right" />
       
      {/* ✅ APP DOWNLOAD BUTTON (SMALLER + RIGHT SIDE) */}
-<div className="fixed top-3 right-4 z-50">
+<div className="fixed top-0.5 right-4 z-50">
   <a
     href="https://drive.google.com/file/d/1tT9eLOoWFW9UemD65WAgtCKaBddbH742/view?usp=drivesdk"
     target="_blank"
