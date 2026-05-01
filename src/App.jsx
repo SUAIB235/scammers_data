@@ -89,7 +89,7 @@ export default function App() {
         className="w-6 h-6"
       />
       <div className="text-left leading-tight">
-        <p className="text-[10px] text-gray-600">Get App</p>
+        <p className="text-[10px] text-gray-600">Get The App</p>
         <p className="text-sm font-semibold text-gray-800">Download</p>
       </div>
     </button>
