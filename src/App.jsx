@@ -68,13 +68,12 @@ export default function App() {
     { n: filtered.length, t: "Matches Found" },
     { n: "24/7", t: "Live Search" },
     { n: "100%", t: "Community Driven" },
-  ];
+  ]; 
+      return (
+  <div className="min-h-screen bg-gradient-to-br from-[#f8fffb] via-[#eefaf3] to-[#e9f7ef] text-slate-800">
+    <Toaster position="top-right" />
 
-  return (
-    <div className="min-h-screen bg-[#f5faf6] text-slate-800">
-      <Toaster position="top-right" />
-      
-     {/* ✅ APP DOWNLOAD BUTTON (SMALLER + RIGHT SIDE) */}
+    {/* ✅ APP DOWNLOAD BUTTON (SMALLER + RIGHT SIDE) */}
 <div className="fixed top-0.5 right-4 z-50">
   <a
     href="https://drive.google.com/file/d/1tT9eLOoWFW9UemD65WAgtCKaBddbH742/view?usp=drivesdk"
@@ -95,179 +94,194 @@ export default function App() {
     </button>
   </a>
 </div>
-      
-      {/* HERO */}
-      <section className="max-w-6xl mx-auto px-4 py-12 grid md:grid-cols-2 gap-10 items-center">
-        <div>
-          <p className="text-emerald-600 font-semibold mb-3">
-            Community Protection Platform
-          </p>
+    
+    {/* HERO */}
+    <section className="max-w-6xl mx-auto px-4 py-12 grid md:grid-cols-2 gap-10 items-center">
+      <div>
+        <p className="text-[#00bc7d] font-semibold mb-3 tracking-wide">
+          Community Protection Platform
+        </p>
 
-          <h1 className="text-5xl font-bold leading-tight">
-            Report Scammers{" "}
-            <span className="text-emerald-500">With Confidence</span>
-          </h1>
+        <h1 className="text-5xl font-bold leading-tight text-slate-900">
+          Report Scammers{" "}
+          <span className="text-[#00bc7d]">With Confidence</span>
+        </h1>
 
-          <p className="mt-4 text-slate-500">
-            Search suspicious numbers, usernames, and bank details. Help others
-            stay safe by submitting reports instantly.
-          </p>
+        <p className="mt-4 text-slate-500 leading-relaxed">
+          Search suspicious numbers, usernames, and bank details. Help others
+          stay safe by submitting reports instantly.
+        </p>
 
-          {/* MOBILE BUTTONS ONLY */}
-          <div className="mt-6 flex gap-3 md:hidden">
-            <button
-              onClick={scrollToSubmit}
-              className="bg-emerald-500 text-white px-5 py-3 rounded-lg w-full"
-            >
-              Submit Report
-            </button>
-
-            <button
-              onClick={scrollToSearch}
-              className="border px-5 py-3 rounded-lg w-full"
-            >
-              Search Now
-            </button>
-          </div>
-        </div>
-
-        {/* DESKTOP SUBMIT FORM */}
-        <div
-          ref={submitRef}
-          className="hidden md:block bg-white rounded-2xl shadow-xl p-6 space-y-4"
-        >
-          <h3 className="font-bold text-xl">Create Scam Report</h3>
-
-          <select
-            value={reportType}
-            onChange={(e) => setReportType(e.target.value)}
-            className="w-full border rounded-lg p-3"
+        {/* MOBILE BUTTONS ONLY */}
+        <div className="mt-6 flex gap-3 md:hidden">
+          <button
+            onClick={scrollToSubmit}
+            className="bg-[#00bc7d] text-white px-5 py-3 rounded-xl w-full shadow-lg hover:scale-105 transition"
           >
-            <option value="number">Phone Number</option>
-            <option value="username">Username</option>
-            <option value="bank">Bank Info</option>
-          </select>
-
-          <input
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            placeholder={
-              reportType === "number"
-                ? "Enter Number"
-                : reportType === "username"
-                  ? "Enter Username"
-                  : "Enter Bank"
-            }
-            className="w-full border rounded-lg p-3"
-          />
-
-          <textarea
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-            placeholder="Reason"
-            className="w-full border rounded-lg p-3 h-28"
-          />
+            Submit Report
+          </button>
 
           <button
-            onClick={submit}
-            className="w-full bg-emerald-500 text-white py-3 rounded-lg font-semibold"
+            onClick={scrollToSearch}
+            className="bg-white border border-slate-200 px-5 py-3 rounded-xl w-full shadow-md hover:scale-105 transition"
           >
-            Submit Now
+            Search Now
           </button>
         </div>
-      </section>
+      </div>
 
-      {/* MOBILE SUBMIT FORM */}
-      <section className="px-4 pb-6 md:hidden">
-        <div
-          ref={submitRef}
-          className="bg-white rounded-2xl shadow-xl p-6 space-y-4"
+      {/* DESKTOP SUBMIT FORM */}
+      <div
+        ref={submitRef}
+        className="hidden md:block bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border border-white p-6 space-y-4"
+      >
+        <h3 className="font-bold text-xl text-slate-900">
+          Create Scam Report
+        </h3>
+
+        <select
+          value={reportType}
+          onChange={(e) => setReportType(e.target.value)}
+          className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-[#00bc7d]"
         >
-          <h3 className="font-bold text-xl">Create Scam Report</h3>
+          <option value="number">Phone Number</option>
+          <option value="username">Username</option>
+          <option value="bank">Bank Info</option>
+        </select>
 
-          <select
-            value={reportType}
-            onChange={(e) => setReportType(e.target.value)}
-            className="w-full border rounded-lg p-3"
+        <input
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder={
+            reportType === "number"
+              ? "Enter Number"
+              : reportType === "username"
+              ? "Enter Username"
+              : "Enter Bank"
+          }
+          className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-[#00bc7d]"
+        />
+
+        <textarea
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+          placeholder="Reason"
+          className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 h-28 focus:outline-none focus:ring-2 focus:ring-[#00bc7d]"
+        />
+
+        <button
+          onClick={submit}
+          className="w-full bg-[#00bc7d] text-white py-3 rounded-xl font-semibold shadow-lg hover:scale-[1.02] transition"
+        >
+          Submit Now
+        </button>
+      </div>
+    </section>
+
+    {/* MOBILE SUBMIT FORM */}
+    <section className="px-4 pb-6 md:hidden">
+      <div
+        ref={submitRef}
+        className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border border-white p-6 space-y-4"
+      >
+        <h3 className="font-bold text-xl text-slate-900">
+          Create Scam Report
+        </h3>
+
+        <select
+          value={reportType}
+          onChange={(e) => setReportType(e.target.value)}
+          className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3"
+        >
+          <option value="number">Phone Number</option>
+          <option value="username">Username</option>
+          <option value="bank">Bank Info</option>
+        </select>
+
+        <input
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder={
+            reportType === "number"
+              ? "Enter Number"
+              : reportType === "username"
+              ? "Enter Username"
+              : "Enter Bank"
+          }
+          className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3"
+        />
+
+        <textarea
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+          placeholder="Reason"
+          className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 h-28"
+        />
+
+        <button
+          onClick={submit}
+          className="w-full bg-[#00bc7d] text-white py-3 rounded-xl font-semibold shadow-lg"
+        >
+          Submit Now
+        </button>
+      </div>
+    </section>
+
+    {/* STATS */}
+    <section className="py-8">
+      <div className="max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        {stats.map((s, i) => (
+          <div
+            key={i}
+            className="bg-white/80 backdrop-blur-xl rounded-2xl p-5 shadow-md border border-white"
           >
-            <option value="number">Phone Number</option>
-            <option value="username">Username</option>
-            <option value="bank">Bank Info</option>
-          </select>
-
-           <input
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            placeholder={
-              reportType === "number"
-                ? "Enter Number"
-                : reportType === "username"
-                  ? "Enter Username"
-                  : "Enter Bank"
-            }
-            className="w-full border rounded-lg p-3"
-          />
-
-          <textarea
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-            placeholder="Reason"
-            className="w-full border rounded-lg p-3 h-28"
-          />
-
-          <button
-            onClick={submit}
-            className="w-full bg-emerald-500 text-white py-3 rounded-lg font-semibold"
-          >
-            Submit Now
-          </button>
-        </div>
-      </section>
-
-      {/* STATS */}
-      <section className="bg-white py-8 border-y">
-        <div className="max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          {stats.map((s, i) => (
-            <div key={i}>
-              <div className="text-3xl font-bold">{s.n}</div>
-              <div className="text-sm text-slate-500">{s.t}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* SEARCH */}
-      <section ref={searchRef} className="max-w-6xl mx-auto px-4 py-10">
-        <div className="relative max-w-xl mb-8">
-          <FaSearch className="absolute left-4 top-4 text-slate-400" />
-
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search reports..."
-            className="w-full bg-white rounded-full border pl-11 pr-4 py-3 shadow-sm"
-          />
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-4">
-          {filtered.map((item) => (
-            <div
-              key={item.id}
-              className="bg-white rounded-2xl border p-5 shadow-sm"
-            >
-              <div className="font-semibold capitalize">{item.type}</div>
-              <div className="text-lg mt-1">{item.value}</div>
-              <div className="text-slate-500 text-sm mt-2">{item.reason}</div>
-            </div>
-          ))}
-        </div>
-
-        {filtered.length === 0 && (
-          <div className="text-center text-slate-400 py-10">
-            No reports found
+            <div className="text-3xl font-bold text-slate-900">{s.n}</div>
+            <div className="text-sm text-slate-500">{s.t}</div>
           </div>
-        )}
-      </section>
-    </div>
-  );
+        ))}
+      </div>
+    </section>
+
+    {/* SEARCH */}
+    <section ref={searchRef} className="max-w-6xl mx-auto px-4 py-10">
+      <div className="relative max-w-xl mb-8">
+        <FaSearch className="absolute left-4 top-4 text-slate-400" />
+
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search reports..."
+          className="w-full bg-white rounded-full border border-slate-200 pl-11 pr-4 py-3 shadow-md focus:outline-none focus:ring-2 focus:ring-[#00bc7d]"
+        />
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-4">
+        {filtered.map((item) => (
+          <div
+            key={item.id}
+            className="bg-white rounded-3xl border border-slate-100 p-5 shadow-md hover:shadow-xl transition"
+          >
+            <div className="font-semibold capitalize text-[#00bc7d]">
+              {item.type}
+            </div>
+
+            <div className="text-lg mt-1 font-semibold text-slate-900">
+              {item.value}
+            </div>
+
+            <div className="text-slate-500 text-sm mt-3 italic border-l-4 border-[#00bc7d] pl-3">
+              {item.reason}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {filtered.length === 0 && (
+        <div className="text-center text-slate-400 py-10">
+          No reports found
+        </div>
+      )}
+    </section>
+  </div>
+);
 }
