@@ -171,7 +171,7 @@ export default function App() {
             {/* LINKS */}
             <div className="flex flex-col gap-3">
               <button
-                onClick={() => window.open("https://copypasteserver.vercel.app/", "_blank")}
+                onClick={() => window.open("https://drive.google.com/file/d/11XHSxMIoTjIL0H7Yw23E4JumW50MECss/view?usp=drivesdk", "_blank")}
                 className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg text-left w-full"
               >
                 <FaCopy className="text-[#00bc7d]" />
