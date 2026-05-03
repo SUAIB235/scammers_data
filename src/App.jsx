@@ -171,11 +171,11 @@ export default function App() {
             {/* LINKS */}
             <div className="flex flex-col gap-3">
               <button
-                onClick={() => window.open("https://example1.com", "_blank")}
+                onClick={() => window.open("https://copypasteserver.vercel.app/", "_blank")}
                 className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg text-left w-full"
               >
                 <FaCopy className="text-[#00bc7d]" />
-                <span>Loading...</span>
+                <span>Easy Copy Paste</span>
               </button>
             </div>
           </div>
