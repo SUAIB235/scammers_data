@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { db } from "./firebase";
 import {
   collection,
@@ -15,7 +16,8 @@ import {
 } from "firebase/firestore";
 import toast, { Toaster } from "react-hot-toast";
 import { FaCopy, FaSearch } from "react-icons/fa";
-import { BsActivity, BsDownload, BsGrid, BsX } from "react-icons/bs";
+import { BsActivity, BsDownload, BsX } from "react-icons/bs";
+import { TbArrowsExchange2 } from "react-icons/tb";
 
 export default function App() {
   const [reportType, setReportType] = useState("number");
@@ -26,6 +28,7 @@ export default function App() {
   const [search, setSearch] = useState("");
   const [data, setData] = useState([]);
   const [showViews, setShowViews] = useState(false);
+  const navigate = useNavigate();
 
   const submitRef = useRef(null);
   const searchRef = useRef(null);
@@ -145,42 +148,12 @@ export default function App() {
 
         {/* MORE SERVICES */}
         <button
-          onClick={() => setShowServices(true)}
+          onClick={() => navigate("/copypaste")}
           className="text-[#00bc7d] transition hover:scale-105"
         >
-          <BsGrid className="text-2xl drop-shadow-sm" />
+          <TbArrowsExchange2 className="text-2xl drop-shadow-sm" />
         </button>
       </div>
-
-      {showServices && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center">
-          <div className="bg-white rounded-2xl shadow-xl w-[90%] max-w-sm p-5 relative animate-fadeIn">
-            {/* CLOSE BUTTON */}
-            <button
-              onClick={() => setShowServices(false)}
-              className="absolute top-3 right-3 text-gray-600 hover:text-red-500"
-            >
-              <BsX className="text-2xl" />
-            </button>
-
-            {/* TITLE */}
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">
-              More Services
-            </h2>
-
-            {/* LINKS */}
-            <div className="flex flex-col gap-3">
-              <button
-                onClick={() => window.open("https://drive.google.com/file/d/11XHSxMIoTjIL0H7Yw23E4JumW50MECss/view?usp=drivesdk", "_blank")}
-                className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg text-left w-full"
-              >
-                <FaCopy className="text-[#00bc7d]" />
-                <span>Easy Copy Paste</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* HERO */}
       <section className="max-w-6xl mx-auto px-4 py-12 grid md:grid-cols-2 gap-10 items-center">
