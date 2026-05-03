@@ -14,12 +14,13 @@ import {
   increment,
 } from "firebase/firestore";
 import toast, { Toaster } from "react-hot-toast";
-import { FaSearch } from "react-icons/fa";
-import { BsActivity } from "react-icons/bs";
+import { FaCopy, FaSearch } from "react-icons/fa";
+import { BsActivity, BsDownload, BsGrid, BsX } from "react-icons/bs";
 
 export default function App() {
   const [reportType, setReportType] = useState("number");
   const [totalViews, setTotalViews] = useState(0);
+  const [showServices, setShowServices] = useState(false);
   const [value, setValue] = useState("");
   const [reason, setReason] = useState("");
   const [search, setSearch] = useState("");
@@ -113,33 +114,12 @@ export default function App() {
     <div className="min-h-screen bg-gradient-to-br from-[#f8fffb] via-[#eefaf3] to-[#e9f7ef] text-slate-800">
       <Toaster position="top-right" />
 
-      {/* ✅ APP DOWNLOAD BUTTON (SMALLER + RIGHT SIDE) */}
-      <div className="fixed top-0.5 right-4 z-50">
-        <a
-          href="https://drive.google.com/file/d/1tT9eLOoWFW9UemD65WAgtCKaBddbH742/view?usp=drivesdk"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ textDecoration: "none" }}
-        >
-          <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/20 backdrop-blur-lg border border-white/30 shadow-lg hover:scale-105 transition">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png"
-              alt="Drive"
-              className="w-6 h-6"
-            />
-            <div className="text-left leading-tight">
-              <p className="text-[10px] text-gray-600">Get The App</p>
-              <p className="text-sm font-semibold text-gray-800">Download</p>
-            </div>
-          </button>
-        </a>
-      </div>
-
-      {/* 👁 VIEW COUNTER (TOP LEFT) */}
-      <div className="absolute top-3 left-4 z-50">
+      {/* 👁 VIEW + DOWNLOAD (TOP LEFT) */}
+      <div className="absolute top-3 right-4 z-50 flex items-center gap-3">
+        {/* VIEW BUTTON */}
         <button
           onClick={handleViewClick}
-          className="flex items-center gap-2 text-[#00bc7d] font-semibold transition hover:scale-105"
+          className="text-[#00bc7d] font-semibold transition hover:scale-105"
         >
           {showViews ? (
             <span className="text-sm bg-white/70 backdrop-blur-md px-3 py-1 rounded-full shadow-md border border-white">
@@ -149,7 +129,58 @@ export default function App() {
             <BsActivity className="text-2xl drop-shadow-sm" />
           )}
         </button>
+
+        {/* DOWNLOAD BUTTON */}
+        <button
+          onClick={() =>
+            window.open(
+              "https://drive.google.com/file/d/1tT9eLOoWFW9UemD65WAgtCKaBddbH742/view?usp=drivesdk",
+              "_blank",
+            )
+          }
+          className="text-[#00bc7d] transition hover:scale-105"
+        >
+          <BsDownload className="text-2xl drop-shadow-sm" />
+        </button>
+
+        {/* MORE SERVICES */}
+        <button
+          onClick={() => setShowServices(true)}
+          className="text-[#00bc7d] transition hover:scale-105"
+        >
+          <BsGrid className="text-2xl drop-shadow-sm" />
+        </button>
       </div>
+
+      {showServices && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center">
+          <div className="bg-white rounded-2xl shadow-xl w-[90%] max-w-sm p-5 relative animate-fadeIn">
+            {/* CLOSE BUTTON */}
+            <button
+              onClick={() => setShowServices(false)}
+              className="absolute top-3 right-3 text-gray-600 hover:text-red-500"
+            >
+              <BsX className="text-2xl" />
+            </button>
+
+            {/* TITLE */}
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">
+              More Services
+            </h2>
+
+            {/* LINKS */}
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={() => window.open("https://example1.com", "_blank")}
+                className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg text-left w-full"
+              >
+                <FaCopy className="text-[#00bc7d]" />
+                <span>Loading...</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* HERO */}
       <section className="max-w-6xl mx-auto px-4 py-12 grid md:grid-cols-2 gap-10 items-center">
