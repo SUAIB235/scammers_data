@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BsShieldLock } from "react-icons/bs";
 import { FaCopy, FaCheck, FaHeart } from "react-icons/fa";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Support() {
   const [copied, setCopied] = useState("");
@@ -32,11 +33,27 @@ export default function Support() {
   const copyText = (text) => {
     navigator.clipboard.writeText(text);
     setCopied(text);
+
+    toast.success("Copied to clipboard");
+
     setTimeout(() => setCopied(""), 1500);
   };
 
   return (
     <div className="min-h-screen bg-[#eef6f1] text-slate-800 px-4 py-6">
+
+      {/* TOASTER */}
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          style: {
+            background: "#00bc7d",
+            color: "#fff",
+            borderRadius: "10px",
+            padding: "10px 14px",
+          },
+        }}
+      />
 
       {/* HEADER */}
       <div className="text-center mb-6">
