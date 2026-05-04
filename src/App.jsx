@@ -18,6 +18,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { FaCopy, FaSearch } from "react-icons/fa";
 import { BsActivity, BsDownload, BsX } from "react-icons/bs";
 import { TbArrowsExchange2 } from "react-icons/tb";
+import { LiaDonateSolid } from "react-icons/lia";
 
 export default function App() {
   const [reportType, setReportType] = useState("number");
@@ -119,6 +120,15 @@ export default function App() {
 
       {/* 👁 VIEW + DOWNLOAD (TOP LEFT) */}
       <div className="absolute top-3 right-4 z-50 flex items-center gap-3">
+
+       {/* SUPPORT */}
+        <button
+          onClick={() => navigate("/support")}
+          className="text-[#00bc7d] transition hover:scale-105"
+        >
+          <LiaDonateSolid  className="text-2xl drop-shadow-sm" />
+        </button>
+
         {/* VIEW BUTTON */}
         <button
           onClick={handleViewClick}
