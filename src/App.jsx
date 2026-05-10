@@ -30,6 +30,7 @@ export default function App() {
   const [search, setSearch] = useState("");
   const [data, setData] = useState([]);
   const [showViews, setShowViews] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
 
   const [showForm, setShowForm] = useState(false);
 
@@ -112,50 +113,143 @@ export default function App() {
     <div className="min-h-screen bg-gradient-to-br from-[#f8fffb] via-[#eefaf3] to-[#e9f7ef] text-slate-800 relative">
       <Toaster position="top-right" />
 
-      {/* TOP RIGHT ICONS */}
-      <div className="fixed top-4 right-4 z-50 flex items-center gap-3">
+      {/* PREMIUM FLOATING MENU */}
+      <div className="fixed top-4 right-4 z-[9999]">
+        {/* MENU BUTTON */}
         <button
-          onClick={() => navigate("/support")}
-          className="text-[#00bc7d] transition hover:scale-110 bg-white p-2 rounded-full shadow"
+          onClick={() => setShowMenu(!showMenu)}
+          className={`group relative w-11 h-11 rounded-2xl backdrop-blur-2xl border border-white/40 shadow-[0_8px_30px_rgba(0,0,0,0.12)] flex items-center justify-center transition-all duration-300 ${
+            showMenu ? "bg-[#00bc7d] scale-105" : "bg-white/80 hover:scale-105"
+          }`}
         >
-          <LiaDonateSolid className="text-2xl" />
+          <div className="flex flex-col gap-1">
+            <span
+              className={`w-4 h-[2px] rounded-full transition-all duration-300 ${
+                showMenu ? "rotate-45 translate-y-2 bg-white" : "bg-[#00bc7d]"
+              }`}
+            />
+
+            <span
+              className={`w-4 h-[2px] rounded-full transition-all duration-300 ${
+                showMenu ? "opacity-0" : "bg-[#00bc7d]"
+              }`}
+            />
+
+            <span
+              className={`w-4 h-[2px] rounded-full transition-all duration-300 ${
+                showMenu ? "-rotate-45 -translate-y-2 bg-white" : "bg-[#00bc7d]"
+              }`}
+            />
+          </div>
         </button>
 
-        <button
-          onClick={handleViewClick}
-          className="text-[#00bc7d] transition hover:scale-110 bg-white p-2 rounded-full shadow"
+        {/* MENU PANEL */}
+        <div
+          className={`absolute top-16 right-0 w-60 transition-all duration-300 origin-top-right ${
+            showMenu
+              ? "opacity-100 scale-100 visible"
+              : "opacity-0 scale-95 invisible"
+          }`}
         >
-          {showViews ? (
-            <span className="text-sm">{totalViews}</span>
-          ) : (
-            <BsActivity className="text-2xl" />
-          )}
-        </button>
+          <div className="overflow-hidden rounded-2xl border border-white/40 bg-white/80 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.18)]">
+            {/* HEADER */}
+            <div className="px-4 py-3 bg-gradient-to-r from-[#00bc7d] to-emerald-400 text-white">
+              <p className="text-sm opacity-90">Quick Access</p>
 
-        <button
-          onClick={() =>
-            window.open(
-              "https://drive.google.com/file/d/1tT9eLOoWFW9UemD65WAgtCKaBddbH742/view?usp=drivesdk",
-              "_blank",
-            )
-          }
-          className="text-[#00bc7d] transition hover:scale-110 bg-white p-2 rounded-full shadow"
-        >
-          <BsDownload className="text-2xl" />
-        </button>
+              <h3 className="text-lg font-bold mt-1">Dashboard Menu</h3>
+            </div>
 
-        <button
-          onClick={() => navigate("/copypaste")}
-          className="text-[#00bc7d] transition hover:scale-110 bg-white p-2 rounded-full shadow"
-        >
-          <TbArrowsExchange2 className="text-2xl" />
-        </button>
+            {/* MENU ITEMS */}
+            <div className="p-3 space-y-2">
+              {/* SUPPORT */}
+              <button
+                onClick={() => {
+                  navigate("/support");
+                  setShowMenu(false);
+                }}
+                className="w-full flex items-center gap-4 p-3 rounded-2xl hover:bg-[#f4fffa] transition group"
+              >
+                <div className="w-10 h-10 rounded-2xl bg-[#e8fff5] flex items-center justify-center group-hover:scale-110 transition">
+                  <LiaDonateSolid className="text-xl text-[#00bc7d]" />
+                </div>
+
+                <div className="text-left">
+                  <p className="font-semibold text-slate-800">Support</p>
+
+                  <p className="text-xs text-slate-500">Help the community</p>
+                </div>
+              </button>
+
+              {/* VISITORS */}
+              <button
+                onClick={handleViewClick}
+                className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-[#f4fffa] transition group"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-[#e8fff5] flex items-center justify-center group-hover:scale-110 transition">
+                  <BsActivity className="text-2xl text-[#00bc7d]" />
+                </div>
+
+                <div className="text-left">
+                  <p className="font-semibold text-slate-800">Visitors</p>
+
+                  <p className="text-sm text-slate-500">
+                    {showViews
+                      ? `${totalViews} total visitors`
+                      : "View analytics"}
+                  </p>
+                </div>
+              </button>
+
+              {/* DOWNLOAD */}
+              <button
+                onClick={() => {
+                  window.open(
+                    "https://drive.google.com/file/d/1tT9eLOoWFW9UemD65WAgtCKaBddbH742/view?usp=drivesdk",
+                    "_blank",
+                  );
+
+                  setShowMenu(false);
+                }}
+                className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-[#f4fffa] transition group"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-[#e8fff5] flex items-center justify-center group-hover:scale-110 transition">
+                  <BsDownload className="text-2xl text-[#00bc7d]" />
+                </div>
+
+                <div className="text-left">
+                  <p className="font-semibold text-slate-800">Download</p>
+
+                  <p className="text-sm text-slate-500">Get resources</p>
+                </div>
+              </button>
+
+              {/* SERVICES */}
+              <button
+                onClick={() => {
+                  navigate("/copypaste");
+                  setShowMenu(false);
+                }}
+                className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-[#f4fffa] transition group"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-[#e8fff5] flex items-center justify-center group-hover:scale-110 transition">
+                  <TbArrowsExchange2 className="text-2xl text-[#00bc7d]" />
+                </div>
+
+                <div className="text-left">
+                  <p className="font-semibold text-slate-800">More Services</p>
+
+                  <p className="text-sm text-slate-500">Explore tools</p>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* FLOATING PLUS BUTTON */}
       <button
         onClick={() => setShowForm(true)}
-       className="fixed bottom-6 right-5 z-[9999] bg-[#00bc7d] text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition"
+        className="fixed bottom-6 right-5 z-[9999] bg-[#00bc7d] text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition"
       >
         <FaPlus className="text-xl" />
       </button>
