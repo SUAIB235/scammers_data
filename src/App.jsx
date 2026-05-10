@@ -263,8 +263,18 @@ export default function App() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search reports..."
-            className="w-full bg-white rounded-full border border-slate-200 pl-11 pr-4 py-3 shadow-md focus:outline-none focus:ring-2 focus:ring-[#00bc7d]"
+            className="w-full bg-white rounded-full border border-slate-200 pl-11 pr-10 py-3 shadow-md focus:outline-none focus:ring-2 focus:ring-[#00bc7d]"
           />
+
+          {/* CLEAR BUTTON */}
+          {search && (
+            <button
+              onClick={() => setSearch("")}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-red-500 transition"
+            >
+              <BsX className="text-2xl" />
+            </button>
+          )}
         </div>
       </section>
 
