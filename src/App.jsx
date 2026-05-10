@@ -185,14 +185,14 @@ export default function App() {
                 onClick={handleViewClick}
                 className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-[#f4fffa] transition group"
               >
-                <div className="w-12 h-12 rounded-2xl bg-[#e8fff5] flex items-center justify-center group-hover:scale-110 transition">
-                  <BsActivity className="text-2xl text-[#00bc7d]" />
+                <div className="w-10 h-10 rounded-2xl bg-[#e8fff5] flex items-center justify-center group-hover:scale-110 transition">
+                  <BsActivity className="text-xl text-[#00bc7d]" />
                 </div>
 
                 <div className="text-left">
                   <p className="font-semibold text-slate-800">Visitors</p>
 
-                  <p className="text-sm text-slate-500">
+                  <p className="text-xs text-slate-500">
                     {showViews
                       ? `${totalViews} total visitors`
                       : "View analytics"}
@@ -212,14 +212,14 @@ export default function App() {
                 }}
                 className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-[#f4fffa] transition group"
               >
-                <div className="w-12 h-12 rounded-2xl bg-[#e8fff5] flex items-center justify-center group-hover:scale-110 transition">
-                  <BsDownload className="text-2xl text-[#00bc7d]" />
+                <div className="w-10 h-10 rounded-2xl bg-[#e8fff5] flex items-center justify-center group-hover:scale-110 transition">
+                  <BsDownload className="text-xl text-[#00bc7d]" />
                 </div>
 
                 <div className="text-left">
                   <p className="font-semibold text-slate-800">Download</p>
 
-                  <p className="text-sm text-slate-500">Get resources</p>
+                  <p className="text-xs text-slate-500">Get resources</p>
                 </div>
               </button>
 
@@ -231,14 +231,14 @@ export default function App() {
                 }}
                 className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-[#f4fffa] transition group"
               >
-                <div className="w-12 h-12 rounded-2xl bg-[#e8fff5] flex items-center justify-center group-hover:scale-110 transition">
-                  <TbArrowsExchange2 className="text-2xl text-[#00bc7d]" />
+                <div className="w-10 h-10 rounded-2xl bg-[#e8fff5] flex items-center justify-center group-hover:scale-110 transition">
+                  <TbArrowsExchange2 className="text-xl text-[#00bc7d]" />
                 </div>
 
                 <div className="text-left">
                   <p className="font-semibold text-slate-800">More Services</p>
 
-                  <p className="text-sm text-slate-500">Explore tools</p>
+                  <p className="text-xs text-slate-500">Explore tools</p>
                 </div>
               </button>
             </div>
