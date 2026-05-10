@@ -155,7 +155,7 @@ export default function App() {
       {/* FLOATING PLUS BUTTON */}
       <button
         onClick={() => setShowForm(true)}
-        className="fixed right-5 top-1/2 -translate-y-1/2 z-50 bg-[#00bc7d] text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition"
+       className="fixed bottom-6 right-5 z-[9999] bg-[#00bc7d] text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition"
       >
         <FaPlus className="text-xl" />
       </button>
