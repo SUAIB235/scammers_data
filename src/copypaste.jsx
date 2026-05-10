@@ -189,14 +189,14 @@ export default function App() {
         {/* SUPPORT */}
         <button
           onClick={() => navigate("/support")}
-          className="bg-white p-2 rounded-full shadow"
+          className="bg-white p-2 rounded-full shadow text-green-600 transition hover:scale-110"
         >
           <LiaDonateSolid className="text-2xl drop-shadow-sm" />
         </button>
 
         <button
           onClick={handleViewClick}
-          className="bg-white p-2 rounded-full shadow"
+          className="bg-white p-2 rounded-full shadow text-green-600 transition hover:scale-110"
         >
           {showViews ? totalViews : <BsActivity />}
         </button>
@@ -208,14 +208,14 @@ export default function App() {
               "_blank",
             )
           }
-          className="bg-white p-2 rounded-full shadow"
+          className="bg-white p-2 rounded-full shadow text-green-600 transition hover:scale-110"
         >
           <BsDownload />
         </button>
 
         <button
           onClick={() => navigate("/")}
-          className="bg-white p-2 rounded-full shadow"
+          className="bg-white p-2 rounded-full shadow text-green-600 transition hover:scale-110"
         >
           <TbArrowsExchange2 className="text-2xl drop-shadow-sm" />
         </button>
