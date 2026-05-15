@@ -109,6 +109,14 @@ export default function App() {
     { n: "100%", t: "Community Driven" },
   ];
 
+  const quickReasons = [
+    "Refund Appeal",
+    "Negative Feedback Dei",
+    "Khoros Deina",
+    "Scammer",
+    "Thirdparty",
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#f8fffb] via-[#eefaf3] to-[#e9f7ef] text-slate-800 relative">
       <Toaster position="top-right" />
@@ -368,6 +376,25 @@ export default function App() {
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3"
               />
 
+              {/* QUICK REASONS */}
+              <div className="flex flex-wrap gap-2">
+                {quickReasons.map((item, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setReason(item)}
+                    className={`px-3 py-2 rounded-full text-sm transition border ${
+                      reason === item
+                        ? "bg-[#00bc7d] text-white border-[#00bc7d]"
+                        : "bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200"
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+
+              {/* TEXTAREA */}
               <textarea
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
