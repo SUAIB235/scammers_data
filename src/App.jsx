@@ -111,10 +111,10 @@ export default function App() {
 
   const quickReasons = [
     "Refund Appeal",
-    "Negative Feedback Dei",
-    "Khoros Deina",
     "Scammer",
+    "Khoros Deina",
     "Thirdparty",
+    "Negative Feedback Dei",
   ];
 
   return (
